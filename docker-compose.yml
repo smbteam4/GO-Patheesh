@@ -1,0 +1,35 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+version: '3.8'
+
+# Define services
+services:
+
+  # App Service
+  app-server:
+    # Configuration for building the docker image for the service
+    image: robot-apocalypse
+    container_name: robot_apocalypse_server
+    environment:
+      ROBOTAPOCALYPSE_MONGO_HOST: "mongodb://admin:admin@mongo-server:27017/"
+      ROBOTAPOCALYPSE_MONGO_DATABASE: "robot-apocalypse"
+    ports:
+      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    restart: unless-stopped
+
+  mongo-server:
+    image: mongo
+    container_name: mongo-server
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8084:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo-server

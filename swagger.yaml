@@ -1,0 +1,204 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  APIResponseModel:
+    description: |-
+      model response
+      global client response structure
+    properties:
+      data:
+        type: object
+        x-go-name: Data
+      message:
+        type: string
+        x-go-name: Message
+      status_code:
+        format: int64
+        type: integer
+        x-go-name: StatusCode
+    type: object
+    x-go-name: APIResponse
+    x-go-package: robot-apocalypse/pkg/models
+  InfectionReport:
+    description: infection report
+    properties:
+      infected:
+        description: infected
+        format: float
+        type: number
+        x-go-name: Infected
+      non_infected:
+        description: non_infected
+        format: float
+        type: number
+        x-go-name: NonInfected
+    type: object
+    x-go-package: robot-apocalypse/pkg/models
+  Location:
+    description: |-
+      model location
+      Which can be hold the location related information
+    properties:
+      latitude:
+        format: float
+        type: number
+        x-go-name: Latitude
+      longitude:
+        format: float
+        type: number
+        x-go-name: Longitude
+    type: object
+    x-go-package: robot-apocalypse/pkg/models
+  Resources:
+    description: |-
+      model Resources
+      inventory of resources
+    items:
+      type: string
+    type: array
+    x-go-package: robot-apocalypse/pkg/models
+  Survivor:
+    description: model survivor
+    properties:
+      age:
+        description: age
+        format: int64
+        type: integer
+        x-go-name: Age
+      id:
+        description: id
+        type: string
+        x-go-name: ID
+      location:
+        $ref: '#/definitions/Location'
+      name:
+        description: name
+        type: string
+        x-go-name: Name
+      reportedcount:
+        description: reported count
+        format: int64
+        type: integer
+        x-go-name: ReportedCount
+      resources:
+        $ref: '#/definitions/Resources'
+    type: object
+    x-go-package: robot-apocalypse/pkg/models
+  SurvivorInfected:
+    description: model survivor infected
+    properties:
+      id:
+        description: id
+        type: string
+        x-go-name: ID
+      reported_by:
+        description: reported_by
+        type: string
+        x-go-name: ReportedBy
+    type: object
+    x-go-package: robot-apocalypse/pkg/models
+host: localhost:8080/api/v1
+info:
+  description: Golang Robot-Apocalypse API.
+  title: Golang Robot-Apocalypse API.
+  version: 1.0.0
+paths:
+  /report/{criteria}:
+    get:
+      description: Percentage
+      operationId: idOfReportCriteriaEndpoint
+      parameters:
+      - in: path
+        name: criteria
+        required: true
+        type: string
+        x-go-name: Criteria
+      responses:
+        "200":
+          description: ""
+      tags:
+      - Report
+  /report/percentage:
+    get:
+      description: Percentage
+      operationId: idOfreportPercentage
+      responses:
+        "200":
+          description: APIResponseModel
+          schema:
+            $ref: '#/definitions/APIResponseModel'
+      tags:
+      - Report
+  /robots/load:
+    post:
+      description: Percentage
+      operationId: idOfRobotsLoad
+      responses:
+        "200":
+          description: ""
+      tags:
+      - Robots
+  /survivors:
+    post:
+      description: create new survivor endpoint
+      operationId: idOfSurvivorCreateEndpoint
+      parameters:
+      - in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/Survivor'
+      responses:
+        "200":
+          description: APIResponseModel
+          schema:
+            $ref: '#/definitions/APIResponseModel'
+      tags:
+      - Survivors
+    put:
+      description: update the survivor informations
+      operationId: idOfSurvivorUpdateEndpoint
+      parameters:
+      - in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/Survivor'
+      responses:
+        "200":
+          description: APIResponseModel
+          schema:
+            $ref: '#/definitions/APIResponseModel'
+      tags:
+      - Survivors
+  /survivors/infected:
+    put:
+      description: mark the survivor as infected
+      operationId: idOfSurvivorInfectedEndpoint
+      parameters:
+      - in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/SurvivorInfected'
+      responses:
+        "200":
+          description: APIResponseModel
+          schema:
+            $ref: '#/definitions/APIResponseModel'
+      tags:
+      - Survivors
+produces:
+- application/json
+schemes:
+- http
+security:
+- APIKeyHeader:
+  - '[]'
+securityDefinitions:
+  APIKeyHeader:
+    in: header
+    name: TOKEN
+    type: apiKey
+swagger: "2.0"
